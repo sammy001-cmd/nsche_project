@@ -1,4 +1,5 @@
-web: gunicorn nsche_futminna.nsche_futminna.wsgi:application
+web: gunicorn nsche_futminna.wsgi
+
 
 
 
