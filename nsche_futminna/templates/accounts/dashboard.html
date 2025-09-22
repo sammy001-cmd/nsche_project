@@ -1,0 +1,194 @@
+{% extends "private.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <!-- Profile Card -->
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-body text-center">
+        <img src="{{ student.profile_picture.url }}" alt="Profile Picture"
+             class="rounded-circle mb-3 border border-3 border-success"
+             width="120" height="120">
+        <h5 class="fw-bold">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+        <p class="text-muted mb-1">{{ student.program }}</p>
+        <p class="text-muted">{{ student.level }}</p>
+        <a href="{% url 'profile' %}" class="btn btn-success btn-sm mt-2">Update Profile</a>
+      </div>
+    </div>
+  </div>
+
+  {% if request.user.is_authenticated %}
+<a href="{% url 'select_dues' %}" class="btn btn-success btn-sm">Pay Dues</a>
+{% else %}
+<a href="{% url 'login' %}?next={% url 'initiate_payment' %}" class="btn btn-primary btn-sm">Login to Pay</a>
+{% endif %}
+
+
+  <!-- Events Section -->
+  <div class="col-md-8">
+    <!-- Upcoming Events -->
+  <a href="{% url 'student_events' %}" class="text-decoration-none">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-success text-white fw-bold">Upcoming Events</div>
+        <div class="card-body">
+          {% if upcoming_events %}
+            <ul class="list-group list-group-flush">
+            {% for event in upcoming_events %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="fw-semibold">{{ event.title }}</span><br>
+                  <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
+                </div>
+                {% comment %} <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-success btn-sm">View</a> {% endcomment %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">No upcoming events.</p>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+
+    <!-- Past Events -->
+  <a href="{% url 'student_events' %}" class="text-decoration-none">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-secondary text-white fw-bold">Past Events</div>
+      <div class="card-body">
+        {% if past_events %}
+          <ul class="list-group list-group-flush">
+            {% for event in past_events %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="fw-semibold">{{ event.title }}</span><br>
+                  <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
+                </div>
+                {% comment %} <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-secondary btn-sm">View</a> {% endcomment %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">No past events yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+  </div>
+  <!-- Payment History Section -->
+<div class="card shadow-sm mt-4">
+  <div class="card-header bg-success text-white fw-bold">Payment History</div>
+  <div class="card-body">
+    {% if payments %}
+      <ul class="list-group list-group-flush">
+        {% for payment in payments %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ payment.amount_naira }} NGN</strong> — 
+              {{ payment.created_at|date:"M d, Y, P" }} 
+              <br>Status: 
+              {% if payment.status == "success" %}
+                <span class="badge bg-success">Success</span>
+              {% elif payment.status == "pending" %}
+                <span class="badge bg-warning">Pending</span>
+              {% else %}
+                <span class="badge bg-danger">Failed</span>
+              {% endif %}
+            </div>
+            {% if payment.status == "success" %}
+              <a href="{% url 'download_receipt' payment.reference %}" class="btn btn-sm btn-primary">
+                Download Receipt
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">No payment history yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "private.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Profile Card -->
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <img src="{{ student.profile_picture.url }}" alt="Profile Picture"
+             class="rounded-circle mb-3" width="120" height="120">
+        <h5>{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+        <p class="text-muted mb-1">{{ student.program }}</p>
+        <p class="text-muted">{{ student.level }}</p>
+        <a href="{% url 'profile' %}" class="btn btn-outline-success btn-sm">Update Profile</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming & Past Events -->
+  <div class="col-md-8">
+    <div class="row">
+      <!-- Upcoming Events -->
+      <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white">Upcoming Events</div>
+          <div class="card-body">
+            {% if upcoming_events %}
+              <ul class="list-group">
+                {% for event in upcoming_events %}
+                  <li class="list-group-item">
+                    {{ event.title }} <br>
+                    <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted">No upcoming events.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Past Events -->
+      <div class="col-md-6 mb-3">
+        <div class="card shadow-sm">
+          <div class="card-header bg-secondary text-white">Past Events</div>
+          <div class="card-body">
+            {% if past_events %}
+              <ul class="list-group">
+                {% for event in past_events %}
+                  <li class="list-group-item">
+                    {{ event.title }} <br>
+                    <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted">No past events yet.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+ {% endcomment %}

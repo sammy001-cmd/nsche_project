@@ -1,0 +1,60 @@
+<!-- payments/templates/payments/receipt.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Receipt</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .receipt { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #000; }
+        h2 { text-align: center; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        td, th { border: 1px solid #000; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <h2>Payment Receipt</h2>
+        <p><strong>Student:</strong> {{ payment.student.user.get_full_name }}</p>
+        <p><strong>Email:</strong> {{ payment.student.user.email }}</p>
+        {% comment %} <p><strong>Amount Paid:</strong> ₦{{ payment.amount|floatformat:2 }}</p> {% endcomment %}
+        <p><strong>Amount Paid:</strong> ₦{{ payment.amount_naira|floatformat:2 }}</p>
+        <p><strong>Reference:</strong> {{ payment.reference }}</p>
+        <p><strong>Description:</strong> {{ payment.description }}</p>
+        <p><strong>Status:</strong> {{ payment.status }}</p>
+        <p><strong>Date:</strong> {{ payment.created_at }}</p>
+    </div>
+</body>
+</html>
+
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Receipt</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .header { text-align: center; margin-bottom: 20px; }
+    .details { margin-top: 20px; }
+    .details p { margin: 5px 0; }
+    .footer { margin-top: 30px; font-size: 12px; text-align: center; color: gray; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>NSChE FUTMINNA Payment Receipt</h2>
+  </div>
+  <div class="details">
+    <p><strong>Student:</strong> {{ payment.student.user.get_full_name }}</p>
+    <p><strong>Amount:</strong> ₦{{ payment.amount|floatformat:2 }}</p>
+    <p><strong>Reference:</strong> {{ payment.reference }}</p>
+    <p><strong>Status:</strong> {{ payment.status }}</p>
+    <p><strong>Date:</strong> {{ payment.created_at|date:"F j, Y, P" }}</p>
+  </div>
+  <div class="footer">
+    <p>Powered by NSChE FUTMINNA Platform</p>
+  </div>
+</body>
+</html> {% endcomment %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+<ul>
+    <li><a href="{% url 'admin:index' %}">Django Admin Panel</a></li>
+    <li><a href="{% url 'manage_events' %}">Manage Events</a></li>
+    <li><a href="{% url 'manage_users' %}">Manage Users</a></li>
+</ul>
+{% endblock %}

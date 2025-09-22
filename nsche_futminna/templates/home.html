@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center bg-success text-white py-5 " style="border-radius: 15px;">
+  <div class="container fade-in">
+    <h1 class="display-4 fw-bold">NSChE FUTMINNA</h1>
+    <p class="lead">Nigerian Society of Chemical Engineers – FUTMINNA Student Chapter</p>
+    <a href="{% url 'events_list' %}" class="btn btn-light btn-lg mt-3">Explore Events</a>
+    <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg mt-3">Join Us</a>
+  </div>
+</section>
+
+<!-- Quick Links -->
+<section class="py-5">
+  <div class="container fade-in">
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="card shadow border-0 h-100">
+          <div class="card-body">
+            <h5 class="card-title">About Us</h5>
+            <p class="card-text">Learn about our mission, vision, and student leadership.</p>
+            <a href="{% url 'about' %}" class="btn btn-success">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow border-0 h-100">
+          <div class="card-body">
+            <h5 class="card-title">Student Resources</h5>
+            <p class="card-text">Access notes, past questions, and academic support materials.</p>
+            <a href="{% url 'resources' %}" class="btn btn-success">Access Resources</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow border-0 h-100">
+          <div class="card-body">
+            <h5 class="card-title">Research & Innovation</h5>
+            <p class="card-text">Showcasing student research projects and innovation hubs.</p>
+            <a href="#" class="btn btn-success">View Research</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call To Action -->
+<section class="bg-light py-5 text-center">
+  <div class="container">
+    <h2 class="fw-bold">Be Part of Our Community</h2>
+    <p class="mb-4">Join NSChE FUTMINNA and connect with chemical engineering students and alumni.</p>
+    <a href="{% url 'register' %}" class="btn btn-success btn-lg">Become a Member</a>
+  </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,138 @@
+{% extends "private.html" %} 
+{% block title %} My Events — NSChE FUTMINNA {% endblock %} 
+{% block content %}
+<h2 class="mb-3">Available Events</h2>
+
+{% if messages %} {% for message in messages %}
+<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+{% endfor %} {% endif %} {% if events %}
+
+<div>
+  <table class="table table-hover table-bordered align-middle text-nowrap">
+    <thead class="table-light">
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  {% for event in events %}
+  <tr id="event-{{ event.id }}">
+    <td class="text-wrap" data-label="Title">
+      {% if event.image %}
+        <img src="{{ event.image.url }}" alt="{{ event.title }}" style="width:80px; height:auto; margin-right:10px;">
+      {% endif %}
+      {{ event.title }}
+    </td>
+    <td data-label="Date">{{ event.date|date:"F j, Y" }}</td>
+    <td class="text-wrap" data-label="Location">{{ event.location }}</td>
+    <td>
+      {% if event.id in registered_event_ids %}
+      <span class="badge bg-secondary w-100">Registered</span>
+      {% else %}
+      <button
+        class="btn btn-sm btn-success register-btn w-100"
+        data-event="{{ event.id }}"
+      >
+        Register
+      </button>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+    {% comment %} <tbody>
+      {% for event in events %}
+      <tr id="event-{{ event.id }}">
+        <td class="text-wrap" data-label="Title">{{ event.title }}</td>
+        <td data-label="Date">{{ event.date|date:"F j, Y" }}</td>
+        <td class="text-wrap" data-label="Location">{{ event.location }}</td>
+        <td data-label="">
+          {% if event.id in registered_event_ids %}
+          <span class="badge bg-secondary w-100">Registered</span>
+          {% else %}
+          <button
+            class="btn btn-sm btn-success register-btn w-100"
+            data-event="{{ event.id }}"
+          >
+            Register
+          </button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody> {% endcomment %}
+  </table>
+</div>
+
+{% comment %}
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr id="event-{{ event.id }}">
+        <td>{{ event.title }}</td>
+        <td>{{ event.date|date:"F j, Y" }}</td>
+        <td>{{ event.location }}</td>
+        <td>
+          {% if event.id in registered_event_ids %}
+          <span class="badge bg-secondary">Registered</span>
+          {% else %}
+          <button
+            class="btn btn-sm btn-success register-btn"
+            data-event="{{ event.id }}"
+          >
+            Register
+          </button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endcomment %} {% else %}
+<p>No events available.</p>
+{% endif %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".register-btn");
+    buttons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const eventId = this.dataset.event;
+        const csrfToken = "{{ csrf_token }}";
+        fetch("{% url 'register_event_ajax' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({ event_id: eventId }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              const td = button.parentElement;
+              td.innerHTML =
+                '<span class="badge bg-secondary">Registered</span>';
+            } else {
+              alert(data.message);
+            }
+          });
+      });
+    });
+  });
+</script>
+{% endblock %}

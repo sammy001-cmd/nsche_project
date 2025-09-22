@@ -1,0 +1,14 @@
+<!-- payments/select_dues.html -->
+{% extends "private.html" %}
+{% block title %}Select Dues{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3>Select Your Student Type</h3>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Proceed to Payment</button>
+  </form>
+</div>
+{% endblock %}
