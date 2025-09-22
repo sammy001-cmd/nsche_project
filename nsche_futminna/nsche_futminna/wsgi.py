@@ -17,7 +17,7 @@ application = get_wsgi_application()
 import sys
 import os
 
-path = '/home/nschefutminna/nsche_futminna'
+path = '/home/nsche_futminna/nsche_futminna'
 if path not in sys.path:
     sys.path.append(path)
 
