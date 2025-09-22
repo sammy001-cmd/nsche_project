@@ -1,1 +1,2 @@
-gunicorn nsche_futminna.nsche_futminna.wsgi:application
+gunicorn nsche_project.nsche_futminna.wsgi:application
+
