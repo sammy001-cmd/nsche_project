@@ -97,16 +97,13 @@ DATABASES = {
 #         default=os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}")
 #     )
 # }
-
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],   # ← tell Django to look here
+        'DIRS': [BASE_DIR / 'templates'],   # custom templates folder
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
+            'context_processors': [ 
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -115,6 +112,25 @@ TEMPLATES = [
         },
     },
 ]
+
+
+
+
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [BASE_DIR / 'templates'],   # ← tell Django to look here
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [ 
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
 
 LOGIN_REDIRECT_URL = '/accounts/dashboard/'  # Redirect after login
 LOGOUT_REDIRECT_URL = 'home'  # Redirect after logout
