@@ -10,16 +10,16 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 import os
 import sys
 
-# Add project path
-path = '/home/nschefutminna/nsche_project/nsche_futminna'
-if path not in sys.path:
-    sys.path.append(path)
+# Add both project and app paths
+project_home = '/home/nschefutminna/nsche_project'
+if project_home not in sys.path:
+    sys.path.append(project_home)
 
-# Set the settings module
+# Set environment variable for settings
 os.environ['DJANGO_SETTINGS_MODULE'] = 'nsche_futminna.settings'
 
-# Activate virtualenv
-activate_this = '/home/nschefutminna/.virtualenvs/nscheenv/bin/activate_this.py'
+# Activate the correct virtualenv
+activate_this = '/home/nschefutminna/.virtualenvs/nscheenv39/bin/activate_this.py'
 with open(activate_this) as file_:
     exec(file_.read(), dict(__file__=activate_this))
 
