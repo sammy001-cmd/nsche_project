@@ -1,0 +1,38 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>{{ action }} Announcement</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-3">
+      {{ form.title.label_tag }} {{ form.title|add_class:"form-control" }}
+      {{ form.title.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.message.label_tag }} {{ form.message|add_class:"form-control" }}
+      {{ form.message.errors }}
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        {{ form.publish_date.label_tag }} {{ form.publish_date|add_class:"form-control" }}
+      </div>
+      <div class="col-md-2 mb-3">
+        <div class="form-check mt-4">
+          {{ form.is_active }} {{ form.is_active.label_tag }}
+        </div>
+      </div>
+      <div class="col-md-2 mb-3">
+        <div class="form-check mt-4">
+          {{ form.is_pinned }} {{ form.is_pinned.label_tag }}
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-success">{{ action }}</button>
+    <a href="{% url 'adminpanel_announcements' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

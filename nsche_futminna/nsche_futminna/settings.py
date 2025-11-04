@@ -24,13 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure--)*j4!le$q_nj3#y^x+ji%@$b4(+=x)wg9bp!b21ot565xp83s"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["nschefutminna.pythonanywhere.com"]
+ALLOWED_HOSTS = ['nschefutminna.pythonanywhere.com', '127.0.0.1', 'localhost']
 
+# ALLOWED_HOSTS = ["nschefutminna.pythonanywhere.com"]
+# ALLOWED_HOSTS += ["localhost", "127.0.0.1"]
 
 # Application definition
 
@@ -44,6 +47,9 @@ INSTALLED_APPS = [
     "accounts",
     "events",
     "payments",
+    "adminpanel",
+    'widget_tweaks',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -100,7 +106,7 @@ DATABASES = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.parent / "templates"],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -186,16 +192,26 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 EMAIL_HOST = "smtp.gmail.com"
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "justinfrank229@gmail.com" 
-EMAIL_HOST_PASSWORD = "vgzxvrfsznzwngxj"  # an App Password
+EMAIL_HOST_USER = "your_email@gmail.com"
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")   # an App Password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
+
+
+
+PASSWORD_RESET_TIMEOUT = 60 * 60  # 1 hour (default is 3 days)
+
+
+DEFAULT_FROM_EMAIL = "NSChE FUTMINNA <justinfrank229@gmail.com>"
 
 
 os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
@@ -203,8 +219,8 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 
 
 # PAYSTACK
-PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "sk_test_6a6bb169c9768b0fca1efadd2e418cbaae2ebdde")
-PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_6a6bb169c9768b0fca1efadd2e418cbaae2ebdde")
+# PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "sk_test_6a6bb169c9768b0fca1efadd2e418cbaae2ebdde")
+# PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_6a6bb169c9768b0fca1efadd2e418cbaae2ebdde")
 PAYSTACK_BASE_URL = "https://api.paystack.co"
 PAYSTACK_WEBHOOK_SECRET = os.getenv("PAYSTACK_WEBHOOK_SECRET", PAYSTACK_SECRET_KEY)
 
@@ -214,3 +230,8 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "justinfrank229@gmail.com")
 USE_TZ = True
 TIME_ZONE = "Africa/Lagos"
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = False  # PythonAnywhere already forces HTTPS

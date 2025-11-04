@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.http import HttpResponse
 import csv
-from .models import Event, EventRegistration, Resource
+from .models import Event, EventRegistration, Resource, Announcement
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -49,7 +49,7 @@ class EventRegistrationAdmin(admin.ModelAdmin):
 #     list_filter = ('uploaded_at',)
 
 
-# ✅ Register models
+#  Register models
 admin.site.register(Event, EventAdmin)
 admin.site.register(EventRegistration, EventRegistrationAdmin)
 
@@ -102,3 +102,11 @@ admin.site.register(EventRegistration, EventRegistrationAdmin)
 # #  Only register ONCE
 # admin.site.register(Event, EventAdmin)
 # admin.site.register(EventRegistration, EventRegistrationAdmin)
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ("title", "created_by", "is_active", "is_pinned", "created_at")
+    list_filter = ("is_active", "is_pinned", "created_at")
+    search_fields = ("title", "message", "created_by__username")
+    ordering = ("-is_pinned", "-created_at")

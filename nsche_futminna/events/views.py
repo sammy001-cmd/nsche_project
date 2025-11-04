@@ -8,6 +8,12 @@ from .models import Event
 from .models import Event, EventRegistration
 from accounts.models import StudentProfile
 from django.utils import timezone
+from .models import Resource
+from django.contrib import messages
+from django.http import JsonResponse
+import json
+from django.views.decorators.csrf import csrf_exempt
+from .models import Event, EventRegistration
 
 
 
@@ -47,13 +53,6 @@ def register_event(request, event_id):
     })
 
 
-from django.contrib import messages
-
-from django.http import JsonResponse
-import json
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
-from .models import Event, EventRegistration
 
 @login_required
 def register_event_ajax(request):
@@ -137,11 +136,10 @@ def student_events(request):
 
 
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .models import Resource
+
 
 @login_required
 def student_resources(request):
     resources = Resource.objects.all().order_by('-uploaded_at')
     return render(request, 'events/student_resources.html', {'resources': resources})
+

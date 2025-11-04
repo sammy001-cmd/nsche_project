@@ -1,0 +1,37 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load widget_tweaks %} 
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 600px;">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">My Profile</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field|add_class:"form-control" }}  <!-- Now works -->
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <div class="d-flex justify-content-between flex-wrap">
+                    <button type="submit" class="btn btn-primary mb-2">Save Changes</button>
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary mb-2">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>
+{% endblock %}

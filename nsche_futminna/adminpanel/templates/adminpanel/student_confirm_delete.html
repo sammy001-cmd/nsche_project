@@ -1,0 +1,14 @@
+{% extends "adminpanel/base_admin.html" %}
+{% block content %}
+<div class="card">
+  <div class="card-body">
+    <h4>Delete Student</h4>
+    <p>Are you sure you want to delete <strong>{{ student.user.username }}</strong>?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Yes, Delete</button>
+      <a href="{% url 'student_detail' student.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

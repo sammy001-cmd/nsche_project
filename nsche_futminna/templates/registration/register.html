@@ -1,4 +1,151 @@
 {% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Register - NSChE FUTMINNA{% endblock %}
+
+{% block content %}
+<style>
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 95vh;
+  background: linear-gradient(135deg, #eaf7ee 0%, #f7fff9 100%);
+}
+
+.register-card {
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 25px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 2.5rem 2rem;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.register-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Logo Animation */
+.register-logo {
+  width: 85px;
+  height: 85px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  animation: pulseLogo 3s ease-in-out infinite;
+}
+@keyframes pulseLogo {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(25,135,84,0.5); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(25,135,84,0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(25,135,84,0); }
+}
+
+.register-title {
+  font-weight: 700;
+  color: #198754;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Inputs */
+.form-control-lg {
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 1rem;
+}
+
+.btn-register {
+  border-radius: 10px;
+  background: linear-gradient(135deg, #28a745, #198754);
+  border: none;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #fff;
+}
+.btn-register:hover {
+  background: linear-gradient(135deg, #198754, #146c43);
+  transform: translateY(-2px);
+}
+
+a {
+  text-decoration: none;
+  color: #198754;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .register-card {
+    padding: 2rem 1.2rem;
+    border-radius: 15px;
+  }
+}
+</style>
+
+<div class="register-wrapper">
+  <div class="register-card animate__animated animate__fadeInUp">
+    <img src="{% static 'img/nchey.jpg' %}" alt="NSChE Logo" class="register-logo">
+    <h2 class="register-title">Student Registration 📝</h2>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} text-center small mb-2">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row">
+        <!-- User Form -->
+        {% for field in user_form %}
+          <div class="col-md-6 mb-3 text-start">
+            {{ field.label_tag }}
+            {{ field|add_class:"form-control form-control-lg" }}
+            {% for error in field.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+
+        <!-- Student Profile Form -->
+        {% for field in profile_form %}
+          <div class="col-md-6 mb-3 text-start">
+            {{ field.label_tag }}
+            {{ field|add_class:"form-control form-control-lg" }}
+            {% for error in field.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="btn btn-register w-100 py-2">Register</button>
+    </form>
+
+    <div class="text-center mt-3">
+      <span>Already have an account? <a href="{% url 'login' %}">Login</a></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Auto-hide alert messages
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(alert => alert.remove());
+  }, 5000);
+</script>
+{% endblock %}
+
+
+
+
+{% comment %} {% extends "base.html" %}
 {% block title %}Register - NSChE FUTMINNA{% endblock %}
 
 {% block content %}
@@ -126,7 +273,7 @@
     alerts.forEach(alert => alert.classList.remove('show'));
   }, 5000);
 </script>
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 
 

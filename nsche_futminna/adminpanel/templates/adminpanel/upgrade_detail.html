@@ -1,0 +1,10 @@
+{% comment %} {% extends "adminpanel/base_admin.html" %}
+{% block title %}Upgrade Details{% endblock %}
+{% block content %}
+<h2>{{ upgrade.name }}</h2>
+<p>{{ upgrade.description }}</p>
+<p><strong>Price:</strong> ₦{{ upgrade.price }}</p>
+<p><strong>Status:</strong> {{ upgrade.active|yesno:"Active,Inactive" }}</p>
+<a href="{% url 'upgrade_edit' upgrade.id %}" class="btn btn-warning">Edit</a>
+<a href="{% url 'upgrade_list' %}" class="btn btn-secondary">Back</a>
+{% endblock %} {% endcomment %}

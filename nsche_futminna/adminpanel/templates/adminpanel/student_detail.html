@@ -1,0 +1,31 @@
+{% extends "adminpanel/base_admin.html" %}
+
+{% block content %}
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white">
+        <h4>Student Details</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-6 mb-2">
+                <strong>Name:</strong> {{ student.user.get_full_name }}
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <strong>Email:</strong> {{ student.user.email }}
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <strong>Department:</strong> {{ student.department }}
+            </div>
+            <div class="col-12 col-md-6 mb-2">
+                <strong>Joined:</strong> {{ student.created_at|date:"M d, Y" }}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{% url 'student_edit' student.pk %}" class="btn btn-warning me-2 mb-2">Edit</a>
+            <a href="{% url 'student_delete' student.pk %}" class="btn btn-danger me-2 mb-2">Delete</a>
+            <a href="{% url 'student_list' %}" class="btn btn-secondary mb-2">Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

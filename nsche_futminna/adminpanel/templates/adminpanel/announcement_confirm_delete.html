@@ -1,0 +1,12 @@
+{% extends "adminpanel/base_admin.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h3>Confirm delete</h3>
+  <p>Are you sure you want to delete "<strong>{{ announcement.title }}</strong>"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'adminpanel_announcements' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

@@ -2,9 +2,194 @@
 {% block title %}Student Dashboard{% endblock %}
 
 {% block content %}
+
+<style>
+/* ---------- Animations ---------- */
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* animation class */
+.slide-in { animation: slideIn .5s ease forwards; }
+
+/* delay classes */
+.delay-1 { animation-delay: .1s; }
+.delay-2 { animation-delay: .2s; }
+.delay-3 { animation-delay: .3s; }
+.delay-4 { animation-delay: .4s; }
+
+/* Round and neat links */
+.quick-btn {
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.announcement-box {
+  background:#f8f9fa; 
+  border-left:4px solid #198754;
+  border-radius:8px;
+  padding:12px 15px;
+  margin-bottom:10px;
+}
+</style>
+
+
 <div class="row g-4">
+
+  <!-- Profile -->
+  <div class="col-md-4 slide-in delay-1">
+    <div class="card shadow-sm border-0">
+      <div class="card-body text-center">
+        <img src="{{ student.profile_picture.url }}"
+             class="rounded-circle mb-3 border border-3 border-success"
+             width="120" height="120">
+
+        <h5 class="fw-bold">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+        <p class="text-muted">{{ student.level }} Level</p>
+
+        <a href="{% url 'profile' %}" class="btn btn-success btn-sm mt-2">Update Profile</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="col-md-8 slide-in delay-2">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-success text-white fw-bold">Quick Access</div>
+      <div class="card-body">
+        <div class="row g-3 text-center">
+
+          <div class="col-6 col-md-3">
+            <a href="{% url 'student_events' %}" class="btn btn-outline-success w-100 quick-btn">📅 Events</a>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <a href="{% url 'student_resources' %}" class="btn btn-outline-success w-100 quick-btn">📂 Resources</a>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <a href="{% url 'profile' %}" class="btn btn-outline-success w-100 quick-btn">👤 Profile</a>
+          </div>
+
+          <div class="col-6 col-md-3">
+            <a href="#" class="btn btn-outline-success w-100 quick-btn">🛟 Support</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Announcements Section -->
+<div class="card shadow-sm mt-4 border-0 slide-in delay-3">
+  <div class="card-header bg-success text-white fw-bold">📢 Announcements</div>
+  <div class="card-body">
+    {% if announcements %}
+      {% for ann in announcements %}
+        <div class="announcement-box slide-in">
+          <div class="d-flex justify-content-between">
+            <span class="fw-semibold">🔔 {{ ann.title }}</span>
+            <small class="text-muted">{{ ann.created_at|date:"M d, Y" }}</small>
+          </div>
+          <p class="mt-1 mb-0">{{ ann.message }}</p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No announcements yet.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Events -->
+<a href="{% url 'student_events' %}" class="text-decoration-none">
+<div class="row g-4 mt-2">
+
+  <div class="col-md-6 slide-in delay-3">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-success text-white fw-bold">Upcoming Events</div>
+      <div class="card-body">
+        {% if upcoming_events %}
+          <ul class="list-group list-group-flush">
+            {% for event in upcoming_events %}
+              <li class="list-group-item slide-in">
+                <strong>{{ event.title }}</strong><br>
+                <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">No upcoming events.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+<a/>
+<a href="{% url 'student_events' %}" class="text-decoration-none">
+  <div class="col-md-6 slide-in delay-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-secondary text-white fw-bold">Past Events</div>
+      <div class="card-body">
+        {% if past_events %}
+          <ul class="list-group list-group-flush">
+            {% for event in past_events %}
+              <li class="list-group-item slide-in">
+                <strong>{{ event.title }}</strong><br>
+                <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">No past events.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+</div>
+<a/>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "private.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4"> {% endcomment %}
   <!-- Profile Card -->
-  <div class="col-md-4">
+  {% comment %} <div class="col-md-4">
     <div class="card shadow-sm border-0">
       <div class="card-body text-center">
         <img src="{{ student.profile_picture.url }}" alt="Profile Picture"
@@ -18,17 +203,17 @@
     </div>
   </div>
 
-  {% if request.user.is_authenticated %}
-<a href="{% url 'select_dues' %}" class="btn btn-success btn-sm">Pay Dues</a>
-{% else %}
+  {% if request.user.is_authenticated %} {% endcomment %}
+{% comment %} <a href="{% url 'select_dues' %}" class="btn btn-success btn-sm">Pay Dues</a> {% endcomment %}
+{% comment %} {% else %}
 <a href="{% url 'login' %}?next={% url 'initiate_payment' %}" class="btn btn-primary btn-sm">Login to Pay</a>
-{% endif %}
+{% endif %} {% endcomment %}
 
 
   <!-- Events Section -->
-  <div class="col-md-8">
+  {% comment %} <div class="col-md-8"> {% endcomment %}
     <!-- Upcoming Events -->
-  <a href="{% url 'student_events' %}" class="text-decoration-none">
+  {% comment %} <a href="{% url 'student_events' %}" class="text-decoration-none">
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-success text-white fw-bold">Upcoming Events</div>
         <div class="card-body">
@@ -39,9 +224,9 @@
                 <div>
                   <span class="fw-semibold">{{ event.title }}</span><br>
                   <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
-                </div>
+                </div> {% endcomment %}
                 {% comment %} <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-success btn-sm">View</a> {% endcomment %}
-              </li>
+              {% comment %} </li>
             {% endfor %}
           </ul>
         {% else %}
@@ -49,10 +234,10 @@
         {% endif %}
       </div>
     </div>
-  </a>
+  </a> {% endcomment %}
 
     <!-- Past Events -->
-  <a href="{% url 'student_events' %}" class="text-decoration-none">
+  {% comment %} <a href="{% url 'student_events' %}" class="text-decoration-none">
     <div class="card shadow-sm border-0">
       <div class="card-header bg-secondary text-white fw-bold">Past Events</div>
       <div class="card-body">
@@ -63,9 +248,9 @@
                 <div>
                   <span class="fw-semibold">{{ event.title }}</span><br>
                   <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
-                </div>
+                </div> {% endcomment %}
                 {% comment %} <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-secondary btn-sm">View</a> {% endcomment %}
-              </li>
+              {% comment %} </li>
             {% endfor %}
           </ul>
         {% else %}
@@ -74,9 +259,9 @@
       </div>
     </div>
   </a>
-  </div>
+  </div> {% endcomment %}
   <!-- Payment History Section -->
-<div class="card shadow-sm mt-4">
+{% comment %} <div class="card shadow-sm mt-4">
   <div class="card-header bg-success text-white fw-bold">Payment History</div>
   <div class="card-body">
     {% if payments %}
@@ -110,7 +295,7 @@
 </div>
 
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 
 
@@ -121,74 +306,3 @@
 
 
 
-
-{% comment %} {% extends "private.html" %}
-{% block title %}Student Dashboard{% endblock %}
-
-{% block content %}
-<div class="row">
-  <!-- Profile Card -->
-  <div class="col-md-4">
-    <div class="card shadow-sm">
-      <div class="card-body text-center">
-        <img src="{{ student.profile_picture.url }}" alt="Profile Picture"
-             class="rounded-circle mb-3" width="120" height="120">
-        <h5>{{ request.user.first_name }} {{ request.user.last_name }}</h5>
-        <p class="text-muted mb-1">{{ student.program }}</p>
-        <p class="text-muted">{{ student.level }}</p>
-        <a href="{% url 'profile' %}" class="btn btn-outline-success btn-sm">Update Profile</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Upcoming & Past Events -->
-  <div class="col-md-8">
-    <div class="row">
-      <!-- Upcoming Events -->
-      <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-          <div class="card-header bg-success text-white">Upcoming Events</div>
-          <div class="card-body">
-            {% if upcoming_events %}
-              <ul class="list-group">
-                {% for event in upcoming_events %}
-                  <li class="list-group-item">
-                    {{ event.title }} <br>
-                    <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <p class="text-muted">No upcoming events.</p>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-
-      <!-- Past Events -->
-      <div class="col-md-6 mb-3">
-        <div class="card shadow-sm">
-          <div class="card-header bg-secondary text-white">Past Events</div>
-          <div class="card-body">
-            {% if past_events %}
-              <ul class="list-group">
-                {% for event in past_events %}
-                  <li class="list-group-item">
-                    {{ event.title }} <br>
-                    <small class="text-muted">{{ event.date|date:"M d, Y" }}</small>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <p class="text-muted">No past events yet.</p>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-
- {% endcomment %}

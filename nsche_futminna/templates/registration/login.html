@@ -1,5 +1,320 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% load widget_tweaks %}
+
 {% block title %}Login - NSChE FUTMINNA{% endblock %}
+
+{% block content %}
+<style>
+/* Layout */
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  background: linear-gradient(135deg, #eaf7ee 0%, #f7fff9 100%);
+}
+
+/* Card container */
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  background: #fff;
+  border-radius: 25px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 2.5rem 2rem;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.login-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Logo animation */
+.login-logo {
+  width: 85px;
+  height: 85px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  animation: pulseLogo 3s ease-in-out infinite;
+  transition: transform 0.4s ease;
+}
+.login-logo:hover {
+  transform: rotate(10deg) scale(1.05);
+}
+@keyframes pulseLogo {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.5); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(25, 135, 84, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+}
+
+/* Header */
+.login-title {
+  font-weight: 700;
+  color: #198754;
+  font-size: 1.6rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Inputs */
+.form-control-lg {
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 1rem;
+}
+
+/* Button */
+.btn-login {
+  border-radius: 10px;
+  background: linear-gradient(135deg, #28a745, #198754);
+  border: none;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #fff;
+}
+.btn-login:hover {
+  background: linear-gradient(135deg, #198754, #146c43);
+  transform: translateY(-2px);
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: #198754;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+  }
+}
+</style>
+
+<div class="login-wrapper">
+  <div class="login-card animate__animated animate__fadeInUp">
+
+    <!-- NSChE Animated Logo -->
+    <img src="{% static 'img/nchey.jpg' %}" alt="NSChE Logo" class="login-logo">
+    <h2 class="login-title">Welcome Back 👋</h2>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} text-center small mb-2">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="needs-validation" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="mb-3 text-start">
+        {{ form.username.label_tag }}
+        {{ form.username|add_class:"form-control form-control-lg" }}
+        {% for error in form.username.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3 text-start">
+        {{ form.password.label_tag }}
+        {{ form.password|add_class:"form-control form-control-lg" }}
+        {% for error in form.password.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="btn btn-login w-100 py-2">Login</button>
+    </form>
+
+    <div class="text-center mt-3">
+      <a href="{% url 'password_reset' %}">Forgot your password?</a>
+      <br>
+      <span>Don’t have an account? <a href="{% url 'register' %}">Register</a></span>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Login - NSChE FUTMINNA{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-3 text-center">Student Login</h2> {% endcomment %}
+
+      <!-- Global messages (success, error, info) -->
+      {% comment %} {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} text-center small mb-2">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %} {% endcomment %}
+
+      {% comment %} <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+          {{ form.username.label_tag }}
+          {{ form.username|add_class:"form-control form-control-lg" }}
+          {% for error in form.username.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.password.label_tag }}
+          {{ form.password|add_class:"form-control form-control-lg" }}
+          {% for error in form.password.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Login</button>
+      </form> {% endcomment %}
+
+      <!-- Forgot password link -->
+      {% comment %} <p class="text-center mt-3 mb-1">
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+      </p>
+
+      <p class="text-center">
+        Don’t have an account? <a href="{% url 'register' %}">Register</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load widget_tweaks %}  {# Load widget_tweaks for add_class #}
+
+{% block title %}Login - NSChE FUTMINNA{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-3 text-center">Student Login</h2>
+
+      <!-- Global messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} text-center small">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+          {{ form.username.label_tag }}
+          {{ form.username|add_class:"form-control form-control-lg" }}
+          {% for error in form.username.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.password.label_tag }}
+          {{ form.password|add_class:"form-control form-control-lg" }}
+          {% for error in form.password.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Login</button>
+      </form>
+
+      <p class="text-center mt-3">
+        Don’t have an account? <a href="{% url 'register' %}">Register</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% block title %}Login - NSChE FUTMINNA{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-3 text-center">Student Login</h2>
+
+      <!-- Global messages -->
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="mb-3">
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          {% for error in form.username.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.password.label_tag }}
+          {{ form.password }}
+          {% for error in form.password.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Login</button>
+      </form>
+
+      <p class="text-center mt-3">
+        Don’t have an account? <a href="{% url 'register' %}">Register</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+
+
+{% comment %} {% extends "base.html" %} {% block title %}Login - NSChE FUTMINNA{% endblock %}
 {% block content %}
 
 <div class="row justify-content-center">
@@ -7,15 +322,33 @@
     <div class="card shadow-sm p-4">
       <h2 class="mb-3 text-center">Student Login</h2>
 
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} text-center">
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %}
+
       <form method="POST">
         {% csrf_token %}
         <div class="mb-3">
           <label for="username" class="form-label">Matric Number</label>
-          <input type="text" name="username" id="username" class="form-control" required>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="form-control"
+            required
+          />
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" name="password" id="password" class="form-control" required>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            required
+          />
         </div>
         <button type="submit" class="btn btn-success w-100">Login</button>
       </form>
@@ -27,13 +360,8 @@
   </div>
 </div>
 
-{% endblock %}
-
-
-
-{% comment %} {% extends "base.html" %}
-{% block title %}Login - NSChE FUTMINNA{% endblock %}
-{% block content %}
+{% endblock %} {% comment %} {% extends "base.html" %} {% block title %}Login -
+NSChE FUTMINNA{% endblock %} {% block content %}
 
 <div class="row justify-content-center">
   <div class="col-md-6">
@@ -44,11 +372,23 @@
         {% csrf_token %}
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
-          <input type="text" name="username" id="username" class="form-control" required>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            class="form-control"
+            required
+          />
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" name="password" id="password" class="form-control" required>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="form-control"
+            required
+          />
         </div>
         <button type="submit" class="btn btn-primary w-100">Login</button>
       </form>
@@ -60,4 +400,4 @@
   </div>
 </div>
 
-{% endblock %} {% endcomment %}
+{% endblock %} {% endcomment %} 

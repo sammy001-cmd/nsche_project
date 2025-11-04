@@ -1,0 +1,246 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load humanize %}
+{% block content %}
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container py-4">
+
+  <!-- Event Details Card -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <!-- Event Details -->
+        <div class="col-md-8">
+          <h3 class="fw-bold mb-3">{{ event.title }}</h3>
+          <p><strong>Date:</strong> {{ event.date|date:"M d, Y - h:i A" }}</p>
+          <p><strong>Location:</strong> {{ event.location }}</p>
+          <p>{{ event.description }}</p>
+          <p class="mb-0">
+            <strong>Fee:</strong>
+            {% if event.fee > 0 %}
+              ₦{{ event.fee|intcomma }}
+            {% else %}
+              Free
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- Event Image -->
+        <div class="col-md-4 text-center">
+          {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}" 
+                 class="img-fluid rounded shadow-sm border"
+                 style="max-height: 200px; object-fit: cover;">
+          {% else %}
+            <div class="bg-light border rounded d-flex align-items-center justify-content-center" 
+                 style="height: 200px;">
+              <span class="text-muted">No Image Available</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registered Students Card -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Registered Students</h5>
+      <div>
+        <a href="{% url 'export_event_registrations_csv' event.id %}" 
+           class="btn btn-sm btn-outline-light me-2">
+          <i class="bi bi-filetype-csv"></i> Export CSV
+        </a>
+        {% comment %} <a href="{% url 'export_event_registrations_excel' event.id %}" 
+           class="btn btn-sm btn-outline-light">
+          <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a> {% endcomment %}
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Email</th>
+            <th scope="col">Registered At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for registration in registrations %}
+          <tr>
+            <td>
+              <strong>
+                {{ registration.student.user.get_full_name|default:registration.student.user.username }}
+              </strong>
+            </td>
+            <td>{{ registration.student.user.email }}</td>
+            <td>
+              <span class="fw-bold" title="{{ registration.registered_at|date:'Y-m-d H:i:s' }}">
+                {{ registration.registered_at|naturaltime }}
+              </span>
+              <br>
+              <small class="text-muted">
+                {{ registration.registered_at|date:"D, M d, Y h:i A" }}
+              </small>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted py-3">
+              No registrations yet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+
+
+{% comment %} {% extends "adminpanel/base_admin.html" %}
+{% load humanize %}
+{% block content %}
+<div class="container py-4">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h3 class="fw-bold">{{ event.title }}</h3>
+      <p><strong>Date:</strong> {{ event.date|date:"M d, Y - h:i A" }}</p>
+      <p><strong>Location:</strong> {{ event.location }}</p>
+      <p>{{ event.description }}</p>
+      <p>
+        <strong>Fee:</strong>
+        {% if event.fee > 0 %}
+          ₦{{ event.fee }}
+        {% else %}
+          Free
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Registered Students</h5>
+      <div>
+        <a href="{% url 'export_event_registrations_csv' event.id %}" 
+           class="btn btn-sm btn-outline-light me-2">
+          <i class="bi bi-filetype-csv"></i> Export CSV
+        </a>
+        <a href="{% url 'export_event_registrations_excel' event.id %}" 
+           class="btn btn-sm btn-outline-light">
+          <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Email</th>
+            <th scope="col">Registered At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for registration in registrations %}
+          <tr>
+            <td>
+              <strong>
+                {{ registration.student.user.get_full_name|default:registration.student.user.username }}
+              </strong>
+            </td>
+            <td>{{ registration.student.user.email }}</td>
+            <td>
+              <span class="fw-bold" title="{{ registration.registered_at|date:'Y-m-d H:i:s' }}">
+                {{ registration.registered_at|naturaltime }}
+              </span>
+              <br>
+              <small class="text-muted">
+                {{ registration.registered_at|date:"D, M d, Y h:i A" }}
+              </small>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted py-3">
+              No registrations yet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+{% comment %} {% load humanize %}
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Event Registrations</h5>
+      <div>
+        <a href="{% url 'export_event_registrations_csv' event.id %}" 
+           class="btn btn-sm btn-outline-light me-2">
+          <i class="bi bi-filetype-csv"></i> Export CSV
+        </a>
+        <a href="{% url 'export_event_registrations_excel' event.id %}" 
+           class="btn btn-sm btn-outline-light">
+          <i class="bi bi-file-earmark-excel"></i> Export Excel
+        </a>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Email</th>
+            <th scope="col">Registered At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for registration in registrations %}
+          <tr>
+            <td>
+              <strong>{{ registration.student.user.get_full_name|default:registration.student.user.username }}</strong>
+            </td>
+            <td>{{ registration.student.user.email }}</td>
+            <td>
+              <span class="fw-bold" title="{{ registration.registered_at|date:'Y-m-d H:i:s' }}">
+                {{ registration.registered_at|naturaltime }}
+              </span>
+              <br>
+              <small class="text-muted">
+                {{ registration.registered_at|date:"D, M d, Y h:i A" }}
+              </small>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted py-3">
+              No registrations yet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div> {% endcomment %}

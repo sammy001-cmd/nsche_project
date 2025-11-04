@@ -1,0 +1,81 @@
+:root {
+  --brand: #0b7a4e; /* emerald */
+  --accent: #2aa876;
+}
+/* For light sections, brand uses emerald; for dark navbar, force white */
+.navbar-light .navbar-brand { color: var(--brand) !important; }
+.navbar-dark .navbar-brand { color: #fff !important; }
+
+.btn-success { background: var(--brand); border-color: var(--brand); }
+
+
+/* Allow long text to wrap inside table cells */
+.table td, .table th {
+  white-space: normal !important;
+  word-wrap: break-word;
+}
+
+@media (max-width: 575.98px) {
+  .table-responsive {
+    overflow-x: visible !important;
+  }
+}
+
+
+@media (max-width: 575.98px) {
+  .table thead {
+    display: none;
+  }
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+  .table tr {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #dee2e6;
+  }
+  .table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 1rem;
+    font-weight: bold;
+    text-align: left;
+  }
+}
+
+
+/* Navbar Brand Fix */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff !important; /* solid white text */
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 10;
+}
+
+.navbar-brand img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.7);
+  flex-shrink: 0;
+}
+
+.navbar-brand:hover {
+  text-decoration: none;
+  opacity: 0.95;
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}

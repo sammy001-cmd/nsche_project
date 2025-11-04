@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>Welcome, {{ request.user.first_name }}!</h2>
+    
+    <div class="stats-cards">
+        <div class="card">
+            <h3>Total Members</h3>
+            <p>{{ total_members }}</p>
+        </div>
+        <div class="card">
+            <h3>Events</h3>
+            <p>{{ total_events }}</p>
+        </div>
+        <div class="card">
+            <h3>Payments</h3>
+            <p>{{ total_payments }}</p>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <a href="{% url 'admin:add_member' %}" class="btn btn-primary">Add Member</a>
+        <a href="{% url 'admin:view_events' %}" class="btn btn-success">View Events</a>
+        <a href="{% url 'admin:payments' %}" class="btn btn-warning">Payments</a>
+    </div>
+
+    <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <ul>
+            {% for log in activity_logs %}
+                <li>{{ log.timestamp }} - {{ log.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Page Container -->
+<div class="container py-5 animate__animated animate__fadeInUp">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+      <!-- Card Wrapper -->
+      <div class="card border-0 shadow-lg rounded-4 glass-card p-4 position-relative overflow-hidden">
+        
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="fw-bold text-gradient m-0">
+            <i class="bi bi-calendar-plus"></i> Create New Event
+          </h3>
+          <a href="{% url 'admin_events' %}" class="btn btn-outline-secondary btn-sm px-3">
+            <i class="bi bi-arrow-left"></i> Back
+          </a>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data" id="eventForm" class="needs-validation" novalidate>
+          {% csrf_token %}
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Event Title</label>
+              {{ form.title }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Location</label>
+              {{ form.location }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Date</label>
+              {{ form.date }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Time</label>
+              {{ form.time }}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description</label>
+              {{ form.description }}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Event Image</label>
+              {{ form.image }}
+              <div id="image-preview" class="mt-3 text-center"></div>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex justify-content-end mt-5">
+            <button type="submit" class="btn btn-gradient px-4 py-2 d-flex align-items-center gap-2">
+              <i class="bi bi-check-circle-fill"></i> Create Event
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Image Preview + Animation Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const fileInput = document.querySelector('input[type="file"]');
+    const preview = document.getElementById("image-preview");
+    const form = document.getElementById("eventForm");
+
+    if (fileInput) {
+      fileInput.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (ev) {
+            preview.innerHTML = `
+              <img src="${ev.target.result}" class="img-fluid rounded shadow-sm animate__animated animate__zoomIn" 
+              style="max-height: 220px; border: 2px solid #e9ecef;">
+            `;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.innerHTML = "";
+        }
+      });
+    }
+
+    // Button animation after submit
+    form.addEventListener("submit", function () {
+      const btn = form.querySelector("button[type='submit']");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Creating...`;
+    });
+  });
+</script>
+
+<!-- Custom Styling -->
+<style>
+  .glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.4s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-gradient {
+    background: linear-gradient(90deg, #0d6efd, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(90deg, #0d6efd, #6610f2);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .btn-gradient:hover {
+    transform: scale(1.05);
+    background: linear-gradient(90deg, #0b5ed7, #520dc2);
+  }
+
+  input.form-control, textarea.form-control, select.form-control {
+    border-radius: 8px !important;
+    border: 1px solid #ced4da;
+    transition: 0.3s ease;
+  }
+
+  input.form-control:focus, textarea.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 6px rgba(13, 110, 253, 0.3);
+  }
+
+  label.form-label {
+    font-size: 14px;
+    color: #495057;
+  }
+
+  @media (max-width: 768px) {
+    .glass-card {
+      padding: 1.5rem !important;
+    }
+  }
+</style>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% comment %} {% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Upgrade Options</h2>
+    <a href="{% url 'upgrade_option_create' %}" class="btn btn-primary mb-3">+ Add New Option</a>
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price ($)</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for option in options %}
+            <tr>
+                <td>{{ option.name }}</td>
+                <td>{{ option.description|truncatewords:15 }}</td>
+                <td>{{ option.price }}</td>
+                <td>{{ option.active }}</td>
+                <td>
+                    <a href="{% url 'upgrade_option_update' option.id %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'upgrade_option_delete' option.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No upgrade options available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} {% endcomment %}

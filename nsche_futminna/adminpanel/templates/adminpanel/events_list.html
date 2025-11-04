@@ -1,0 +1,254 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+  /* Animations */
+  .fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Table Styling */
+  table tbody tr {
+    transition: all 0.2s ease-in-out;
+  }
+
+  table tbody tr:hover {
+    background-color: #f9f9f9;
+    transform: scale(1.01);
+  }
+
+  /* Buttons */
+  .btn-custom {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Search Box */
+  .search-box input {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  /* Animated Create Button */
+  .create-btn {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+    }
+  }
+
+  .event-card {
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+
+  /* 📱 Responsive Layout */
+  @media (max-width: 768px) {
+    .d-flex.justify-content-between {
+      flex-direction: column;
+      align-items: stretch !important;
+    }
+
+    .search-box {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .search-box input {
+      width: 100%;
+    }
+
+    /* Hide table headers on mobile */
+    table thead {
+      display: none;
+    }
+
+    /* Convert table rows to cards */
+    table,
+    table tbody,
+    table tr,
+    table td {
+      display: block;
+      width: 100%;
+    }
+
+    table tbody tr {
+      margin-bottom: 1rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 1rem;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    table td {
+      text-align: left;
+      padding: 8px 0;
+      border: none !important;
+    }
+
+    table td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #555;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .text-end {
+      text-align: left !important;
+      margin-top: 8px;
+    }
+
+    .btn-sm {
+      margin-bottom: 6px;
+    }
+  }
+</style>
+
+<div class="container py-4 fade-in">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary mb-0">
+      <i class="bi bi-calendar-event"></i> Manage Events
+    </h2>
+
+    <!-- Search Form -->
+    <form method="get" class="d-flex search-box" role="search" style="max-width: 350px;">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        class="form-control me-2"
+        placeholder="Search events..."
+      />
+      <button class="btn btn-outline-primary btn-custom" type="submit">
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+  </div>
+
+  <!-- Event Table -->
+  <div class="table-responsive event-card p-3">
+    <table class="table align-middle table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Fee</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+        <tr>
+          <td data-label="Image">
+            {% if event.image %}
+            <img src="{{ event.image.url }}" alt="event image" width="60" height="60" class="rounded shadow-sm">
+            {% else %}
+            <span class="text-muted">No Image</span>
+            {% endif %}
+          </td>
+          <td data-label="Title" class="fw-semibold">{{ event.title }}</td>
+          <td data-label="Date">{{ event.date|date:"M d, Y - h:i A" }}</td>
+          <td data-label="Location">{{ event.location }}</td>
+          <td data-label="Fee">
+            {% if event.fee > 0 %}
+              <span class="badge bg-success">₦{{ event.fee }}</span>
+            {% else %}
+              <span class="badge bg-secondary">Free</span>
+            {% endif %}
+          </td>
+          <td data-label="Actions" class="text-end">
+            <a href="{% url 'event_detail' event.pk %}" class="btn btn-sm btn-primary btn-custom me-1">
+              <i class="bi bi-eye"></i>
+            </a>
+            <a href="{% url 'admin_edit_event' event.pk %}" class="btn btn-sm btn-warning btn-custom me-1">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <a href="{% url 'export_event_registrations_csv' event.pk %}" class="btn btn-sm btn-outline-secondary btn-custom">
+              <i class="bi bi-download"></i>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-muted py-3">
+            <i class="bi bi-calendar-x"></i> No events found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Create Button -->
+  <div class="mt-4 text-end">
+    <a href="{% url 'add_event' %}" class="btn btn-primary btn-lg fw-semibold create-btn btn-custom">
+      <i class="bi bi-plus-circle me-1"></i> Create New Event
+    </a>
+  </div>
+
+  <!-- Pagination -->
+  {% if events.has_other_pages %}
+  <nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+      {% if events.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?q={{ query }}&page={{ events.previous_page_number }}">Previous</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+      {% endif %}
+
+      <li class="page-item disabled">
+        <a class="page-link">Page {{ events.number }} of {{ events.paginator.num_pages }}</a>
+      </li>
+
+      {% if events.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?q={{ query }}&page={{ events.next_page_number }}">Next</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load widget_tweaks %}
+
+{% load static %}
+{% block content %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container mt-4">
+  <div class="card shadow-sm p-4">
+    <h4 class="mb-3 text-success">
+      <i class="fa-solid fa-pen-to-square me-2"></i>Edit Event
+    </h4>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Event Title</label>
+        <input type="text" name="title" value="{{ event.title }}" class="form-control" required>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">
+            <i class="fa-regular fa-calendar-days me-1"></i> Date
+          </label>
+          <input type="date" name="date" value="{{ event.date|date:'Y-m-d' }}" class="form-control" required>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label class="form-label">
+            <i class="fa-regular fa-clock me-1"></i> Time
+          </label>
+          <input type="time" name="time" value="{{ event.time|time:'H:i' }}" class="form-control" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><i class="fa-solid fa-location-dot me-1"></i> Location</label>
+        <input type="text" name="location" value="{{ event.location }}" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><i class="fa-solid fa-align-left me-1"></i> Description</label>
+        <textarea name="description" rows="3" class="form-control">{{ event.description }}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><i class="fa-solid fa-image me-1"></i> Event Image</label><br>
+        {% if event.image %}
+          <div class="mb-2">
+            <img src="{{ event.image.url }}" alt="Event image" class="img-thumbnail rounded" width="200">
+          </div>
+        {% endif %}
+        <input type="file" name="image" class="form-control">
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary">
+          <i class="fa-solid fa-arrow-left me-1"></i> Cancel
+        </a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-save me-1"></i> Update Event
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Auto-hide message after 3s
+  setTimeout(() => {
+    const alert = document.querySelector('.alert');
+    if (alert) alert.classList.remove('show');
+  }, 3000);
+</script>
+{% endblock %}

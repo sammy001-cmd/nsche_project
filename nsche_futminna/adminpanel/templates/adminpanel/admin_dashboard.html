@@ -1,0 +1,217 @@
+{% extends 'adminpanel/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <!-- Dashboard Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">Admin Dashboard</h2>
+    <p class="text-muted mb-0">Welcome back, {{ request.user.username|title }}</p>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-4">
+
+    <!-- Students -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="card dashboard-card shadow-sm border-0 rounded-4 text-center p-3 animate__animated animate__fadeInUp">
+        <div class="card-body">
+          <i class="bi bi-people-fill text-primary fs-1 mb-2"></i>
+          <h6 class="text-muted">Students</h6>
+          <h3 class="fw-bold">{{ students_count }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="card dashboard-card shadow-sm border-0 rounded-4 text-center p-3 animate__animated animate__fadeInUp" style="animation-delay:0.1s;">
+        <div class="card-body">
+          <i class="bi bi-calendar-event-fill text-success fs-1 mb-2"></i>
+          <h6 class="text-muted">Events</h6>
+          <h3 class="fw-bold">{{ events_count }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payments -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="card dashboard-card shadow-sm border-0 rounded-4 text-center p-3 animate__animated animate__fadeInUp" style="animation-delay:0.2s;">
+        <div class="card-body">
+          <i class="bi bi-cash-coin text-warning fs-1 mb-2"></i>
+          <h6 class="text-muted">Payments</h6>
+          <h3 class="fw-bold">{{ payments_count }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Registrations -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="card dashboard-card shadow-sm border-0 rounded-4 text-center p-3 animate__animated animate__fadeInUp" style="animation-delay:0.3s;">
+        <div class="card-body">
+          <i class="bi bi-clipboard-check-fill text-info fs-1 mb-2"></i>
+          <h6 class="text-muted">Registrations</h6>
+          <h3 class="fw-bold">{{ registrations_count }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="card dashboard-card shadow-sm border-0 rounded-4 text-center p-3 animate__animated animate__fadeInUp" style="animation-delay:0.4s;">
+        <div class="card-body">
+          <i class="bi bi-chat-left-text-fill text-danger fs-1 mb-2"></i>
+          <h6 class="text-muted">Feedback</h6>
+          <h3 class="fw-bold">{{ feedback_count }}</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tables Section -->
+  <div class="row mt-5">
+
+    <!-- Recent Students -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow border-0 rounded-4 animate__animated animate__fadeInLeft">
+        <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold text-primary">Recent Students</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in students %}
+                <tr>
+                  <td>{{ student.user.get_full_name }}</td>
+                  <td>{{ student.user.email }}</td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="2" class="text-center text-muted">No students found</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Events -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow border-0 rounded-4 animate__animated animate__fadeInRight">
+        <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fw-bold text-success">Recent Events</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Event</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for event in events %}
+                <tr>
+                  <td>{{ event.title }}</td>
+                  <td>{{ event.date|date:"M d, Y" }}</td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="2" class="text-center text-muted">No events yet</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Payments and Feedback -->
+  <div class="row">
+    <!-- Recent Payments -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow border-0 rounded-4 animate__animated animate__fadeInLeft">
+        <div class="card-header bg-transparent border-0">
+          <h5 class="fw-bold text-warning mb-0">Recent Payments</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Student</th>
+                <th>Amount (₦)</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pay in payments %}
+                <tr>
+                  <td>{{ pay.student.user.get_full_name }}</td>
+                  <td>₦{{ pay.amount_naira|floatformat:2 }}</td>
+                  <td>
+                    {% if pay.status == 'success' %}
+                      <span class="badge bg-success">Success</span>
+                    {% elif pay.status == 'pending' %}
+                      <span class="badge bg-warning text-dark">Pending</span>
+                    {% else %}
+                      <span class="badge bg-danger">Failed</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ pay.created_at|date:"M d, Y" }}</td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="4" class="text-center text-muted">No payments recorded</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Feedback -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow border-0 rounded-4 animate__animated animate__fadeInRight">
+        <div class="card-header bg-transparent border-0">
+          <h5 class="fw-bold text-danger mb-0">Recent Feedback</h5>
+        </div>
+        <div class="card-body">
+          <div class="list-group">
+            {% for feedback in feedbacks %}
+              <div class="list-group-item border-0 border-bottom">
+                <strong>{{ feedback.name }}</strong>
+                <p class="mb-0 text-muted small">{{ feedback.message|truncatewords:10 }}</p>
+                <small class="text-secondary">{{ feedback.created_at|timesince }} ago</small>
+              </div>
+            {% empty %}
+              <p class="text-center text-muted mb-0">No feedback yet</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<style>
+  .dashboard-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+</style>
+
+{% endblock %}
