@@ -221,8 +221,8 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 # PAYSTACK
 # PAYSTACK_PUBLIC_KEY = os.getenv("PAYSTACK_PUBLIC_KEY", "sk_test_6a6bb169c9768b0fca1efadd2e418cbaae2ebdde")
 # PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_6a6bb169c9768b0fca1efadd2e418cbaae2ebdde")
-PAYSTACK_BASE_URL = "https://api.paystack.co"
-PAYSTACK_WEBHOOK_SECRET = os.getenv("PAYSTACK_WEBHOOK_SECRET", PAYSTACK_SECRET_KEY)
+# PAYSTACK_BASE_URL = "https://api.paystack.co"
+# PAYSTACK_WEBHOOK_SECRET = os.getenv("PAYSTACK_WEBHOOK_SECRET", PAYSTACK_SECRET_KEY)
 
 # Default from email (you already have SMTP working; keep your working values)
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "justinfrank229@gmail.com")
