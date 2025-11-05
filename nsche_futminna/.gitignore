@@ -1,0 +1,11 @@
+# Virtual env
+NSChEenv/
+venv/
+
+# Django
+__pycache__/
+db.sqlite3
+
+# Static
+staticfiles/
+*.log

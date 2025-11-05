@@ -13,4 +13,4 @@ def show_structure(root_dir, depth=3, level=0):
         pass
 
 if __name__ == "__main__":
-    show_structure(".", depth=5)
+    show_structure(".", depth=4)
