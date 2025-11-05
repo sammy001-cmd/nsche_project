@@ -193,7 +193,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 EMAIL_HOST = "smtp.gmail.com"
@@ -225,7 +225,7 @@ os.environ["SSL_CERT_FILE"] = certifi.where()
 # PAYSTACK_WEBHOOK_SECRET = os.getenv("PAYSTACK_WEBHOOK_SECRET", PAYSTACK_SECRET_KEY)
 
 # Default from email (you already have SMTP working; keep your working values)
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "justinfrank229@gmail.com")
+# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "justinfrank229@gmail.com")
 
 USE_TZ = True
 TIME_ZONE = "Africa/Lagos"
